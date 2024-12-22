@@ -26,6 +26,8 @@ function Login() {
         }
         try {
             const url = `${APIUrl}/auth/login`;
+            console.log("Check the API URL:", url);
+
             const response = await fetch(url, {
                 method: "POST",
                 headers: {

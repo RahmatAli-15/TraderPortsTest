@@ -4,6 +4,7 @@ import Converter from './CurrencyConverter';
 import CompoundingCalculator from './CompoundingCalculator';
 import MartingaleWithHistory from './MartingaleWithHistory';
 import BreakEvenCalculator from './BreakEvenCalculator';
+import RangeCal from './RangeCal';
 import { Gradient } from '../components/design/Roadmap';
 
 const tools = [
@@ -37,20 +38,21 @@ const tools = [
     description: 'The Martingale Calculator tracks your strategy, calculating trade sizes to recover losses and maintain profits.',
     component: <MartingaleWithHistory />,
   },
+  {
+    name: 'rangeCal',
+    title: 'Levels Calculator',
+    description: 'The Levels Calculator computes adjusted ranges based on the previous day’s high and low, helping you analyze price movements effectively.',
+    component: <RangeCal />,
+  },
 ];
 
 const TraderTools = () => {
-  // State to track which tool is visible
   const [activeTool, setActiveTool] = useState(null);
-
-  // Refs for each tool component
   const toolRefs = useRef({});
 
-  // Function to handle "Use Tool" button click
   const handleToolClick = (toolName) => {
     setActiveTool(toolName);
 
-    // Scroll to the tool if ref exists
     const ref = toolRefs.current[toolName];
     if (ref) {
       ref.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -69,7 +71,6 @@ const TraderTools = () => {
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Tool Boxes */}
           {tools.map(({ name, title, description }) => (
             <div
               key={name}
@@ -89,7 +90,6 @@ const TraderTools = () => {
           ))}
         </div>
 
-        {/* Conditional rendering of selected tools */}
         <div className="mt-8">
           {tools.map(({ name, component }) => (
             <div

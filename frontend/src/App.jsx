@@ -18,6 +18,7 @@ import TraderTools from "./pages/TraderTools";
 import PaidHome from "./pages/PaidHome";
 import ErrorPage from "./pages/ErrorPage";
 
+
 const App = () => {
   const location = useLocation();
   const hideHeaderFooter = location.pathname === "/home";
