@@ -52,91 +52,85 @@ const ExpenseTable = ({ expenses, deleteExpens }) => {
     return (
         <div className="space-y-6">
             {/* Forex Session Summary */}
-            <div className="bg-gray-700 rounded-lg p-6 mb-6 shadow-lg">
-                <h3 className="text-2xl font-bold text-center text-gray-200 hover:scale-105 transform transition-all duration-300 mb-4 mt-4">
+            <div className="bg-gray-700 rounded-lg p-6 mb-6 shadow-lg overflow-x-auto">
+                <h3 className="text-2xl font-bold text-center text-gray-200 mb-4">
                     Forex Session Summary
                 </h3>
-                <div className="space-y-4">
-                    {Object.entries(forexSessionSummary).map(([session, data], index) => {
-                        const net = data.profit - data.loss; // Calculate net profit/loss
-                        return (
-                            <div
-                                key={index}
-                                className="flex flex-col md:flex-row justify-between items-center bg-gray-800 p-4 rounded-md shadow-md hover:scale-105 transform transition-all duration-300"
-                            >
-                                <div className="text-gray-300 text-lg font-semibold w-full md:w-1/5 text-center md:text-left">
-                                    {session}
-                                </div>
-                                <div className="text-gray-400 w-full md:w-1/5 text-center">
-                                    Total Trades: {data.totalTrades}
-                                </div>
-                                <div className="text-green-400 w-full md:w-1/5 text-center">
-                                    Profitable Trades: {data.profitableTrades}
-                                </div>
-                                <div className="text-red-400 w-full md:w-1/5 text-center">
-                                    Loss Trades: {data.lossTrades}
-                                </div>
-                                <div className="text-green-400 font-bold w-full md:w-1/5 text-center">
-                                    Profit: ₹{data.profit}
-                                </div>
-                                <div className="text-red-400 font-bold w-full md:w-1/5 text-center">
-                                    Loss: ₹{data.loss}
-                                </div>
-                                <div
-                                    className={`font-bold w-full md:w-1/5 text-center ${net >= 0 ? 'text-green-500' : 'text-red-500'}`}
+                <table className="min-w-full table-auto border-collapse border border-gray-600">
+                    <thead>
+                        <tr className="bg-gray-800 text-white">
+                            <th className="px-4 py-2 border-b">Session</th>
+                            <th className="px-4 py-2 border-b">Total Trades</th>
+                            <th className="px-4 py-2 border-b">Profitable Trades</th>
+                            <th className="px-4 py-2 border-b">Loss Trades</th>
+                            <th className="px-4 py-2 border-b">Profit</th>
+                            <th className="px-4 py-2 border-b">Loss</th>
+                            <th className="px-4 py-2 border-b">Net Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {Object.entries(forexSessionSummary).map(([session, data], index) => {
+                            const net = data.profit - data.loss;
+                            return (
+                                <tr
+                                    key={index}
+                                    className={`bg-gray-${index % 2 === 0 ? '700' : '800'} text-white`}
                                 >
-                                    Net Amount: ₹{net}
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
+                                    <td className="px-4 py-2 border-b">{session}</td>
+                                    <td className="px-4 py-2 border-b text-center">{data.totalTrades}</td>
+                                    <td className="px-4 py-2 border-b text-center">{data.profitableTrades}</td>
+                                    <td className="px-4 py-2 border-b text-center">{data.lossTrades}</td>
+                                    <td className="px-4 py-2 border-b text-center text-green-400">₹{data.profit}</td>
+                                    <td className="px-4 py-2 border-b text-center text-red-400">₹{data.loss}</td>
+                                    <td className={`px-4 py-2 border-b text-center font-bold ${net >= 0 ? 'text-green-500' : 'text-red-500'}`}>₹{net}</td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
             </div>
 
             {/* Currency Pair Summary */}
-            <div className="bg-gray-700 rounded-lg p-6 mb-6 shadow-lg">
-                <h3 className="text-2xl font-bold text-center text-gray-200 hover:scale-105 transform transition-all duration-300 mb-4 mt-4">
+            <div className="bg-gray-700 rounded-lg p-6 mb-6 shadow-lg overflow-x-auto">
+                <h3 className="text-2xl font-bold text-center text-gray-200 mb-4">
                     Currency Pair Summary
                 </h3>
-                <div className="space-y-4">
-                    {Object.entries(currencyPairSummary).map(([currencyPair, data], index) => {
-                        const net = data.profit - data.loss; // Calculate net profit/loss for currency pair
-                        return (
-                            <div
-                                key={index}
-                                className="flex flex-col md:flex-row justify-between items-center bg-gray-800 p-4 rounded-md shadow-md hover:scale-105 transform transition-all duration-300"
-                            >
-                                <div className="text-gray-300 text-lg font-semibold w-full md:w-1/5 text-center md:text-left">
-                                    {currencyPair}
-                                </div>
-                                <div className="text-gray-400 w-full md:w-1/5 text-center">
-                                    Total Trades: {data.totalTrades}
-                                </div>
-                                <div className="text-green-400 w-full md:w-1/5 text-center">
-                                    Profitable Trades: {data.profitableTrades}
-                                </div>
-                                <div className="text-red-400 w-full md:w-1/5 text-center">
-                                    Loss Trades: {data.lossTrades}
-                                </div>
-                                <div className="text-green-400 font-bold w-full md:w-1/5 text-center">
-                                    Profit: ₹{data.profit}
-                                </div>
-                                <div className="text-red-400 font-bold w-full md:w-1/5 text-center">
-                                    Loss: ₹{data.loss}
-                                </div>
-                                <div
-                                    className={`font-bold w-full md:w-1/5 text-center ${net >= 0 ? 'text-green-500' : 'text-red-500'}`}
+                <table className="min-w-full table-auto border-collapse border border-gray-600">
+                    <thead>
+                        <tr className="bg-gray-800 text-white">
+                            <th className="px-4 py-2 border-b">Currency Pair</th>
+                            <th className="px-4 py-2 border-b">Total Trades</th>
+                            <th className="px-4 py-2 border-b">Profitable Trades</th>
+                            <th className="px-4 py-2 border-b">Loss Trades</th>
+                            <th className="px-4 py-2 border-b">Profit</th>
+                            <th className="px-4 py-2 border-b">Loss</th>
+                            <th className="px-4 py-2 border-b">Net Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {Object.entries(currencyPairSummary).map(([currencyPair, data], index) => {
+                            const net = data.profit - data.loss;
+                            return (
+                                <tr
+                                    key={index}
+                                    className={`bg-gray-${index % 2 === 0 ? '700' : '800'} text-white`}
                                 >
-                                    Net Amount: ₹{net}
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
+                                    <td className="px-4 py-2 border-b">{currencyPair}</td>
+                                    <td className="px-4 py-2 border-b text-center">{data.totalTrades}</td>
+                                    <td className="px-4 py-2 border-b text-center">{data.profitableTrades}</td>
+                                    <td className="px-4 py-2 border-b text-center">{data.lossTrades}</td>
+                                    <td className="px-4 py-2 border-b text-center text-green-400">₹{data.profit}</td>
+                                    <td className="px-4 py-2 border-b text-center text-red-400">₹{data.loss}</td>
+                                    <td className={`px-4 py-2 border-b text-center font-bold ${net >= 0 ? 'text-green-500' : 'text-red-500'}`}>₹{net}</td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
             </div>
 
             {/* Recent Trades */}
-            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-center tracking-wide text-gray-300 hover:scale-105 transform transition-all duration-300 mb-7 mt-7">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-center tracking-wide text-gray-300 mb-7">
                 Recent Trades
             </h2>
             {recentExpenses.length === 0 ? (
@@ -144,7 +138,7 @@ const ExpenseTable = ({ expenses, deleteExpens }) => {
                     <p>No trades found. Please add a trade to see the full functionality</p>
                 </div>
             ) : (
-                recentExpenses.map((expense, index) => (
+                recentExpenses.slice(0, 5).map((expense, index)  => (
                     <div
                         key={index}
                         className={`relative flex flex-col p-5 rounded-lg shadow-lg space-y-3 ${index % 2 === 0 ? 'bg-gray-700' : 'bg-gray-800'}`}
@@ -170,10 +164,10 @@ const ExpenseTable = ({ expenses, deleteExpens }) => {
                             <div>Target (Pips): {expense.target}</div>
                             <div>Stoploss (Pips): {expense.stoploss}</div>
                             <div>Buy/Sell: {expense.buyOrSell}</div>
-                            <div className={"font-bold text-green-400"}>
+                            <div className="font-bold text-green-400">
                                 Profit: ₹{expense.profit || 0}
                             </div>
-                            <div className={"font-bold text-red-400"}>
+                            <div className="font-bold text-red-400">
                                 Loss: ₹{expense.loss || 0}
                             </div>
                         </div>

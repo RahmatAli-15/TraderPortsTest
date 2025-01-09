@@ -13,17 +13,17 @@ const ExpenseSummary = ({ totalProfit, totalLoss, netProfit }) => {
     <div className="mt-3 ">
       <div className="p-8 rounded-xl shadow-2xl w-full max-w-3xl border border-gray-700 transition-shadow duration-300 hover:shadow-3xl flex flex-col items-center space-y-2 mx-auto">
 
-        <h2 className="text-4xl sm:text-4xl lg:text-4xl font-extrabold text-center tracking-wide text-gray-300 hover:scale-105 transform transition-all duration-300 mb-7 ">Trade Summary</h2>
+        <h2 className="text-4xl sm:text-4xl lg:text-4xl font-extrabold text-center tracking-wide text-gray-300 hover:scale-105 transform transition-all duration-300 mb-7 ">Trades Summary</h2>
 
         <div className="flex flex-col md:flex-row justify-between gap-6 md:gap-10 w-full">
           {/* Left Section - Text */}
           <div className="flex flex-col items-center justify-center text-gray-300 space-y-4 w-full md:w-1/2 transform transition-transform duration-300 hover:scale-105">
             <div className="space-y-1">
-              <span className="text-lg font-medium">Total Profit:</span>
+              <span className="text-lg font-medium">Profit:</span>
               <span className="text-2xl text-green-400 font-bold">₹{totalProfit}</span>
             </div>
             <div className="space-y-1">
-              <span className="text-lg font-medium">Total Loss:</span>
+              <span className="text-lg font-medium">Loss:</span>
               <span className="text-2xl text-red-400 font-bold">₹{totalLoss}</span>
             </div>
             <div className="space-y-1">

@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { APIUrl, handleError, handleSuccess } from '../Utils';
-import { ToastContainer, toast } from 'react-toastify'; // Import toast
+import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
 import 'react-toastify/dist/ReactToastify.css';
 import ExpenseTable from './ExpenseTable';
 import ExpenseDetails from './ExpenseDetails';
 import ExpenseForm from './ExpenseForm';
 import { Gradient } from '../components/design/Roadmap';
 
+import Mentorship from './Mentorship';
+import Backtesting from './Backtesting';
+
+
+
 function Home() {
     const [loggedInUser, setLoggedInUser] = useState('');
     const [expenses, setExpenses] = useState([]);
     const [incomeAmt, setIncomeAmt] = useState(0);
     const [expenseAmt, setExpenseAmt] = useState(0);
-    const [error, setError] = useState(null); // New state for managing errors
+    const [error, setError] = useState(null);
+    const [selectedTab, setSelectedTab] = useState('details');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -55,12 +61,15 @@ function Home() {
             const result = await response.json();
             handleSuccess(result?.message);
             setExpenses(result.data);
+
+
         } catch (err) {
-            console.error(err); // Log the error
-            if (!toast.isActive("delete-error")) { // Prevent multiple toasts
+            console.error(err);
+            // Show error toast on failure
+            if (!toast.isActive("delete-error")) {
                 toast.error('Error deleting expense: ' + err.message, { toastId: "delete-error" });
             }
-            setError(err.message); // Update error state
+            setError(err.message);
         }
     };
 
@@ -81,11 +90,11 @@ function Home() {
             const result = await response.json();
             setExpenses(result.data);
         } catch (err) {
-            console.error(err); // Log the error
-            if (!toast.isActive("fetch-error")) { // Prevent multiple toasts
+            console.error(err);
+            if (!toast.isActive("fetch-error")) {
                 toast.error('Error fetching expenses: ' + err.message, { toastId: "fetch-error" });
             }
-            setError(err.message); // Update error state
+            setError(err.message);
         }
     };
 
@@ -110,11 +119,11 @@ function Home() {
             handleSuccess(result?.message);
             setExpenses(result.data);
         } catch (err) {
-            console.error(err); // Log the error
-            if (!toast.isActive("post-error")) { // Prevent multiple toasts
+            console.error(err);
+            if (!toast.isActive("post-error")) {
                 toast.error('Error adding transaction: ' + err.message, { toastId: "post-error" });
             }
-            setError(err.message); // Update error state
+            setError(err.message);
         }
     };
 
@@ -127,40 +136,89 @@ function Home() {
     const netProfit = totalProfit - totalLoss;
 
     return (
-        <div>
+        <div className="flex min-h-screen bg-gray-100">
+            <div className="w-64 bg-gray-900 text-white p-5">
+                {/* Section 1: Title */}
+                <div className="mb-6 border-b border-gray-700 pb-4">
+                    <h2 className="text-2xl font-extrabold hover:scale-105 transform transition-all duration-300">
+                        <span className="bg-gradient-to-r from-orange-500 to-red-800 text-transparent bg-clip-text hover:from-yellow-500 hover:to-pink-600 transition duration-300 ease-in-out">
+                            {" "}Trader
+                        </span>Ports
+                    </h2>
+                </div>
 
-
-
-            {/* Navbar */}
-            <div className="navbar bg-gray-900 text-white p-4">
-                <div className="flex items-center justify-between w-full">
-                    <h1 className="text-2xl font-extrabold">
-                        Welcome, {loggedInUser}
-                    </h1>
+                {/* Section 2: Buttons */}
+                <div className="flex flex-col space-y-4 ">
+                    <button
+                        className="text-lg text-left bg-transparent hover:bg-blue-500 text-white font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                        onClick={() => setSelectedTab('details')}
+                    >
+                        Trades Summary
+                    </button>
+                    <button
+                        className="text-lg text-left bg-transparent hover:bg-blue-500 text-white font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded "
+                        onClick={() => setSelectedTab('form')}
+                    >
+                        Add Trades
+                    </button>
+                    <button
+                        className="text-lg text-left bg-transparent hover:bg-blue-500 text-white font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded "
+                        onClick={() => setSelectedTab('table')}
+                    >
+                        Trades Tables
+                    </button>
+                    
+                    
+                    <button
+                        className="ttext-lg text-left bg-transparent hover:bg-blue-500 text-white font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                        onClick={() => setSelectedTab('backtesting')}
+                    >
+                    Back Testing
+                    </button>
+                    
+                    <button
+                        className="ttext-lg text-left bg-transparent hover:bg-blue-500 text-white font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                        onClick={() => setSelectedTab('mentorship')}
+                    >
+                       Mentorship
+                    </button>
                     <button
                         onClick={handleLogout}
-                        className="px-6 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition duration-200 shadow-md"
+                        className="text-lg  bg-transparent hover:bg-red-500 text-white font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded text-center"
                     >
                         Logout
                     </button>
                 </div>
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl mt-5 font-extrabold text-center tracking-wide text-white hover:scale-105 transform transition-all duration-300">
-                Unlock Your Full Trading Potential
-                <span className="bg-gradient-to-r from-orange-500 to-red-800 text-transparent bg-clip-text hover:from-yellow-500 hover:to-pink-600">
-                    Trader
-                    <span className="text-gray-200">Ports</span>
-                </span>
-            </h1>
-            {/* Pass profit, loss, and net profit to ExpenseDetails component */}
-            <ExpenseDetails
-                totalProfit={totalProfit}
-                totalLoss={totalLoss}
-                netProfit={netProfit}
-            />
-            <ExpenseForm addTransaction={addTransaction} />
-            <ExpenseTable expenses={expenses} deleteExpens={deleteExpens} />
-            <Gradient />
+
+            {/* Main Content */}
+            <div className="flex-1 p-6  bg-gray-800">
+                <div className="flex justify-center items-center mb-6 p-4 rounded-lg shadow-lg">
+                    <h1 className="text-3xl sm:text-4xl font-extrabold text-white text-center">
+                        Welcome, {loggedInUser}
+                    </h1>
+                </div>
+
+                {/* Conditional Rendering for Tabs */}
+                {selectedTab === 'details' && (
+                    <ExpenseDetails
+                        totalProfit={totalProfit}
+                        totalLoss={totalLoss}
+                        netProfit={netProfit}
+                    />
+                )}
+                {selectedTab === 'form' && (
+                    <ExpenseForm addTransaction={addTransaction} />
+                )}
+                {selectedTab === 'table' && (
+                    <ExpenseTable expenses={expenses} deleteExpens={deleteExpens} />
+                )}
+              
+                {selectedTab === 'mentorship' && <Mentorship/>}
+                {selectedTab === 'backtesting' && <Backtesting/>}
+            </div>
+
+         
         </div>
     );
 }
