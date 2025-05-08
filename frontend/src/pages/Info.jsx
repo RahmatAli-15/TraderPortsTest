@@ -1,36 +1,24 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Gradient } from "../components/design/Roadmap";
+import { EconomicCalendar as TradingViewEconomicCalendar } from "react-tradingview-embed";
 
 const EconomicCalendar = () => {
-  useEffect(() => {
-    // Dynamically load the TradingView widget script
-    const script = document.createElement("script");
-    script.src = "https://s3.tradingview.com/external-embedding/embed-widget-events.js";
-    script.async = true;
-    script.innerHTML = JSON.stringify({
-      colorTheme: "light", // or "dark"
-      isTransparent: false,
-      width: "100%",
-      height: 400,
-      locale: "en",
-    });
-
-    document.getElementById("tradingview-calendar").appendChild(script);
-
-    return () => {
-      // Cleanup the widget on unmount
-      const calendarDiv = document.getElementById("tradingview-calendar");
-      if (calendarDiv) calendarDiv.innerHTML = "";
-    };
-  }, []);
-
   return (
     <div className="mb-8">
-      <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-center text-gray-300 hover:scale-105 transform transition-all duration-300 mt-4">Economic Calendar</h2>
-      {/* TradingView widget container */}
-      <div id="tradingview-calendar" className="border border-gray-300 p-4">
-        <p>Loading calendar...</p>
+      <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-center text-gray-300 hover:scale-105 transform transition-all duration-300 mt-4">
+        Economic Calendar
+      </h2>
+      <div className="border border-gray-300 p-4 bg-white">
+        <TradingViewEconomicCalendar
+          widgetProps={{
+            colorTheme: "light",
+            isTransparent: false,
+            width: "100%",
+            height: 400,
+            locale: "en",
+          }}
+        />
       </div>
     </div>
   );
@@ -44,7 +32,7 @@ const Info = () => {
   const [error, setError] = useState(null);
   const [lastUpdated, setLastUpdated] = useState("");
 
-  const API_KEY = "ZQIxlqI0G5v71Mamrsk8j0G9jMkdIaKu"; // Replace with your API key
+  const API_KEY = "ZQIxlqI0G5v71Mamrsk8j0G9jMkdIaKu";
   const API_URL = `https://api.currencybeacon.com/v1/latest?base=USD&symbols=EUR,GBP,JPY,AUD,NZD,CAD,CHF,CNY,INR,BRL&api_key=${API_KEY}`;
 
   const fetchData = async () => {
@@ -52,11 +40,11 @@ const Info = () => {
     try {
       const response = await axios.get(API_URL);
       if (response.data && response.data.rates) {
-        setRates(response.data.rates);
+        const fetchedRates = response.data.rates;
+        setRates(fetchedRates);
 
-        // Mock High/Low and Percent Change Data (replace with actual data)
         const highLowData = Object.fromEntries(
-          Object.entries(response.data.rates).map(([currency, rate]) => [
+          Object.entries(fetchedRates).map(([currency, rate]) => [
             currency,
             { high: rate * 1.05, low: rate * 0.95 },
           ])
@@ -64,7 +52,7 @@ const Info = () => {
         setHighLow(highLowData);
 
         const percentChangeData = Object.fromEntries(
-          Object.entries(response.data.rates).map(([currency, rate]) => [
+          Object.entries(fetchedRates).map(([currency, rate]) => [
             currency,
             (rate * 0.03).toFixed(2),
           ])
@@ -86,8 +74,8 @@ const Info = () => {
 
   useEffect(() => {
     fetchData();
-    const interval = setInterval(fetchData, 60000); // Refresh every 60 seconds
-    return () => clearInterval(interval); // Cleanup interval
+    const interval = setInterval(fetchData, 60000);
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) {
@@ -100,7 +88,7 @@ const Info = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 min-h-screen">
-    <EconomicCalendar />
+      <EconomicCalendar />
       <h1 className="text-2xl sm:text-3xl font-bold mb-2 text-center text-gray-300 hover:scale-105 transform transition-all duration-300">
         Currency Exchange Rates
       </h1>
@@ -131,7 +119,6 @@ const Info = () => {
                 }`}
               >
                 <td className="px-2 sm:px-4 py-2">{`${currency}/USD`}</td>
-                {/* For EUR/USD, invert the rate to get correct display */}
                 <td className="px-2 sm:px-4 py-2">
                   {currency === "EUR" ? (1 / rate).toFixed(4) : rate.toFixed(4)}
                 </td>
@@ -143,9 +130,7 @@ const Info = () => {
                 </td>
                 <td
                   className={`px-2 sm:px-4 py-2 ${
-                    percentChange[currency] > 0
-                      ? "text-green-400"
-                      : "text-red-400"
+                    percentChange[currency] > 0 ? "text-green-400" : "text-red-400"
                   }`}
                 >
                   {percentChange[currency]}%
@@ -155,7 +140,7 @@ const Info = () => {
           </tbody>
         </table>
       </div>
-      <Gradient/>
+      <Gradient />
     </div>
   );
 };
